@@ -7,4 +7,5 @@ public static class sceneManager
 {
     public static string MainLevel  = "Main Level";
     public static string Instructions = "Instructions";
+    public static string MainMenu = "Main Menu"; 
 }

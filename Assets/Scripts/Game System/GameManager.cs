@@ -18,6 +18,10 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(sceneManager.Instructions);
     }
 
+    public void MainMenu()
+    {
+        SceneManager.LoadScene(sceneManager.MainMenu);
+    }
 
 
 }
