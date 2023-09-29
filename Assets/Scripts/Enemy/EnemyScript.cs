@@ -12,22 +12,26 @@ public class EnemyScript : MonoBehaviour
     NavMeshAgent myNavMeshAgent;
     bool confirmDestino = false;
     float t = 0.0f;
+    float timer = 0.0f;
     public GameObject boxRay;
     public GameObject playerTarg;
     public Vector3 destino;
     string status = "Search";
+    NavMeshPath navMeshPath;
     [Header("Objective components")]
     public GameObject patrolTarget;
     public Vector3 poscharTarget = new Vector3(0.0f, 0.0f, 0.0f);
     void Start()
     {
         myNavMeshAgent = GetComponent<NavMeshAgent>();
+        navMeshPath = GetComponent<NavMeshPath>();
     }
-    void Update()
-    {
-        Debug.Log(status);
+    void FixedUpdate()
+    { 
+        Debug.Log(timer);
         //Raycast
         t += 0.1f;
+        timer += 0.1f;
         boxRay.transform.Rotate(0.0f, 40 * Mathf.Sin(t * 20), 0.0f, Space.Self);
         RaycastHit hit;
         if (Physics.Raycast(boxRay.transform.position, boxRay.transform.forward, out hit))
@@ -74,15 +78,20 @@ public class EnemyScript : MonoBehaviour
     {
         if (!confirmDestino) SearchForDest();
         if (confirmDestino) myNavMeshAgent.SetDestination(destino);
-        if (Vector3.Distance(transform.position, destino) < 2) confirmDestino = false;
+        if (Vector3.Distance(transform.position, destino) < 2 || timer > 30)
+        {
+            confirmDestino = false;
+            timer = 0;
+        }
     }
     void SearchForDest()
     {
         float z = Random.Range(-range, range);
         float x = Random.Range(-range, range);
-        destino = new Vector3(transform.position.x + x, transform.position.y, transform.position.z + z);
+        destino = new Vector3(transform.position.x + x, 1, transform.position.z + z);
         if (Physics.Raycast(destino, Vector3.down, groundLayer))
         {
+            //move to target
             confirmDestino = true;
         }
     }
