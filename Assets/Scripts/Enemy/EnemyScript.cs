@@ -8,9 +8,9 @@ public class EnemyScript : MonoBehaviour
 {
     [Header("Enemy moving elements")]
     [SerializeField] LayerMask groundLayer;
+    [SerializeField] float range;
     NavMeshAgent myNavMeshAgent;
     bool confirmDestino = false;
-    float range = 5;
     float t = 0.0f;
     public GameObject boxRay;
     public GameObject playerTarg;
