@@ -24,11 +24,9 @@ public class EnemyScript : MonoBehaviour
     void Start()
     {
         myNavMeshAgent = GetComponent<NavMeshAgent>();
-        navMeshPath = GetComponent<NavMeshPath>();
     }
     void FixedUpdate()
     { 
-        Debug.Log(timer);
         //Raycast
         t += 0.1f;
         timer += 0.1f;
@@ -38,7 +36,7 @@ public class EnemyScript : MonoBehaviour
         {
             Debug.DrawRay(boxRay.transform.position, boxRay.transform.forward * hit.distance, Color.yellow);
             //Cambio de estado al detectar al jugador
-            if (hit.collider is SphereCollider)
+            if (hit.collider is CapsuleCollider)
             {
                 status = "Attack";
             }
@@ -55,22 +53,31 @@ public class EnemyScript : MonoBehaviour
                 GoToDest();
                 break;
             case "Attack":
-                StartCoroutine(Attack());
+                if (playerTarg != null)
+                {
+                    StartCoroutine(Attack());
+                }
                 break;
+        }
+        if (playerTarg == null)
+        {
+            StopAllCoroutines();
+            status = "Search";
         }
     }
     IEnumerator Attack()
     {
         myNavMeshAgent.SetDestination(playerTarg.transform.position);
         float distance = Vector3.Distance(transform.position, playerTarg.transform.position);
-        if (distance < 2)
+        if (distance < 1 && playerTarg != null)
         {
             Destroy(playerTarg);
-            status = "Search";
         }
-        else if (distance > 5)
+        if (distance > 7)
         {
+            Debug.Log(distance);
             status = "Search";
+            StopAllCoroutines();
         }
         yield return null;
     }
