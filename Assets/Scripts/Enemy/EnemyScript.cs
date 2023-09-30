@@ -73,7 +73,7 @@ public class EnemyScript : MonoBehaviour
         {
             Destroy(playerTarg);
         }
-        if (distance > 7)
+        if (distance > 10)
         {
             Debug.Log(distance);
             status = "Search";

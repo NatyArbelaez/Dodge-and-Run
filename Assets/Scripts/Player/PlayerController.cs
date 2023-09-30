@@ -1,105 +1,78 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class PlayerController : MonoBehaviour
 {
+    public GameObject char1;
+    public GameObject char2;
+    public GameObject char3;
+
     private CharacterController charController;
-    private CharacterAnimation playerAnimations;
+    private Animator playerAnimations;
 
     public float movement_Speed = 3f;
     public float gravity = 9.8f;
     public float rotation_Speed = 0.15f;
     public float rotateDegreesPerSecond = 180f;
 
+    Vector3 moveDirection;
+
     void Awake()
     {
         charController = GetComponent<CharacterController>();
-        playerAnimations = GetComponent<CharacterAnimation>();
+        playerAnimations = GetComponent<Animator>();
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         Move();
-        Rotate();
         AnimateWalk();
     }
 
     void Move()
     {
-
-        if (Input.GetAxis(Axis.VERTICAL_AXIS) > 0)
+        float movimientoHorizontal = Input.GetAxis("Horizontal");
+        float movimientoVertical = Input.GetAxis("Vertical");
+        float rotacionHorizontal = Input.GetAxisRaw("Horizontal");
+        float rotacionVertical = Input.GetAxisRaw("Vertical");
+        moveDirection = new Vector3(movimientoHorizontal, 0.0f, movimientoVertical) * movement_Speed;
+        charController.Move(moveDirection * movement_Speed * Time.deltaTime);
+        switch (rotacionVertical)
         {
-
-            Vector3 moveDirection = transform.forward;
-            moveDirection.y -= gravity * Time.deltaTime;
-
-            charController.Move(moveDirection * movement_Speed * Time.deltaTime);
-
-        }
-        else if (Input.GetAxis(Axis.VERTICAL_AXIS) < 0)
-        {
-
-            Vector3 moveDirection = -transform.forward;
-            moveDirection.y -= gravity * Time.deltaTime;
-
-            charController.Move(moveDirection * movement_Speed * Time.deltaTime);
-
-        }
-        else
-        {
-            // if we don't have any input to move the character
-            charController.Move(Vector3.zero);
+            case 0:
+                break;
+            case 1:
+                transform.rotation = Quaternion.Euler(0, 0, 0);
+                break;
+            case -1:
+                transform.rotation = Quaternion.Euler(0, 180, 0);
+                break;
         }
 
-    } // move
-
-    void Rotate()
-    {
-
-        Vector3 rotation_Direction = Vector3.zero;
-
-        if (Input.GetAxis(Axis.HORIZONTAL_AXIS) < 0)
+        switch (rotacionHorizontal)
         {
-
-            rotation_Direction = transform.TransformDirection(Vector3.left);
-
+            case 0:
+                break;
+            case 1:
+                transform.rotation = Quaternion.Euler(0, 90, 0);
+                break;
+            case -1:
+                transform.rotation = Quaternion.Euler(0, -90, 0);
+                break;
         }
-
-        if (Input.GetAxis(Axis.HORIZONTAL_AXIS) > 0)
-        {
-
-            rotation_Direction = transform.TransformDirection(Vector3.right);
-
-        }
-
-        if (rotation_Direction != Vector3.zero)
-        {
-
-            transform.rotation = Quaternion.RotateTowards(
-                transform.rotation, Quaternion.LookRotation(rotation_Direction),
-                rotateDegreesPerSecond * Time.deltaTime);
-
-        }
-
-    } // rotate
-
+    }
     void AnimateWalk()
     {
-
         if (charController.velocity.sqrMagnitude != 0f)
         {
-
-            playerAnimations.Walk(true);
-
+            playerAnimations.SetBool("Walk", true);
         }
         else
         {
-
-            playerAnimations.Walk(false);
-
+            playerAnimations.SetBool("Walk", false);
         }
-
     }
 }
