@@ -6,13 +6,13 @@ public class PauseManager : MonoBehaviour
 {
     public GameObject PausePanel;
     public GameObject PauseButton;
-    public GameObject TimmerPanel;
+    public GameObject Points;
 
     public void PauseAction()
     {
         PausePanel.SetActive(true);
         PauseButton.SetActive(false);
-        TimmerPanel.SetActive(false);
+        Points.SetActive(false);
         Time.timeScale = 0f;
     }
 
@@ -20,7 +20,7 @@ public class PauseManager : MonoBehaviour
     {
         PausePanel.SetActive(false);
         PauseButton.SetActive(true);
-        TimmerPanel.SetActive(true);
+        Points.SetActive(true);
         Time.timeScale = 1f;
     }
 }

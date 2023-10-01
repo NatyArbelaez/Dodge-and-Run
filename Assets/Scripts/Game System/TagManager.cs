@@ -5,9 +5,10 @@ using UnityEngine;
 
 public static class sceneManager
 {
-    public static string MainLevel  = "Main Level";
+    public static string MainLevel  = "TheLevel";
     public static string Instructions = "Instructions";
-    public static string MainMenu = "Main Menu"; 
+    public static string MainMenu = "Main Menu";
+    public static string Finish = "FinishScene";
 }
 
 public static class AnimationTags

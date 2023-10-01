@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.SceneManagement;
 
-public class EnemyScript : MonoBehaviour
+public class EnemyScript2 : MonoBehaviour
 {
     [Header("Enemy moving elements")]
     [SerializeField] LayerMask groundLayer;
@@ -15,7 +15,7 @@ public class EnemyScript : MonoBehaviour
     float t = 0.0f;
     float timer = 0.0f;
     public GameObject boxRay;
-    public GameObject playerTarg;
+    public GameObject playerTarg2;
     public Vector3 destino;
     string status = "Search";
     [Header("Objective components")]
@@ -32,10 +32,11 @@ public class EnemyScript : MonoBehaviour
         //Raycast
         t += 0.1f;
         timer += 0.1f;
-        if (t >= 100)
+        if(t >= 100)
         {
             myNavMeshAgent.speed = 4;
         }
+        Debug.Log(t);
         boxRay.transform.Rotate(0.0f, 40 * Mathf.Sin(t * 20), 0.0f, Space.Self);
         RaycastHit hit;
         if (Physics.Raycast(boxRay.transform.position, boxRay.transform.forward, out hit))
@@ -58,25 +59,25 @@ public class EnemyScript : MonoBehaviour
                 GoToDest();
                 break;
             case "Attack":
-                if (playerTarg != null)
+                if (playerTarg2 != null)
                 {
-                    StartCoroutine("Attack1");
+                    StartCoroutine("Attack3");
                 }
                 break;
         }
-        if (playerTarg == null)
+        if (playerTarg2 == null)
         {
             StopAllCoroutines();
             status = "Search";
         }
     }
-    IEnumerator Attack1()
+    IEnumerator Attack3()
     {
-        myNavMeshAgent.SetDestination(playerTarg.transform.position);
-        float distance = Vector3.Distance(transform.position, playerTarg.transform.position);
-        if (distance < 1 && playerTarg != null)
+        myNavMeshAgent.SetDestination(playerTarg2.transform.position);
+        float distance2 = Vector3.Distance(transform.position, playerTarg2.transform.position);
+        if (distance2 < 1 && playerTarg2 != null)
         {
-            Destroy(playerTarg);
+            Destroy(playerTarg2);
             finishPanel.SetActive(true);
             pausePanel.SetActive(false);
             Time.timeScale = 0f;

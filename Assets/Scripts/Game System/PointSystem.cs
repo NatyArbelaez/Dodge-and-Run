@@ -1,10 +1,13 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class PointSystem : MonoBehaviour
 {
     public Text counterText; // Reference to the UI Text component.
-    private int counter = 0; // Initialize the counter.
+    private float counter = 0; // Initialize the counter.
+    public Text finalScore;
 
     private void Start()
     {
@@ -15,12 +18,14 @@ public class PointSystem : MonoBehaviour
     private void UpdateCounter()
     {
         counterText.text = "Points:  " + counter; // Update the text to display the current counter value.
+        finalScore.text = "TERRIFIC!\r\nscore:\r\n" + counter;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         // Increment the counter infinitely.
-        counter++;
+        counter += Time.deltaTime * 100;
+
 
         // Update the counter text.
         UpdateCounter();

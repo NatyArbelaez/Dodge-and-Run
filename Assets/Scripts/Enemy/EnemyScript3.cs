@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.SceneManagement;
 
-public class EnemyScript : MonoBehaviour
+public class EnemyScript3 : MonoBehaviour
 {
     [Header("Enemy moving elements")]
     [SerializeField] LayerMask groundLayer;
@@ -15,7 +15,7 @@ public class EnemyScript : MonoBehaviour
     float t = 0.0f;
     float timer = 0.0f;
     public GameObject boxRay;
-    public GameObject playerTarg;
+    public GameObject playerTarg3;
     public Vector3 destino;
     string status = "Search";
     [Header("Objective components")]
@@ -58,25 +58,25 @@ public class EnemyScript : MonoBehaviour
                 GoToDest();
                 break;
             case "Attack":
-                if (playerTarg != null)
+                if (playerTarg3 != null)
                 {
-                    StartCoroutine("Attack1");
+                    StartCoroutine("Attack4");
                 }
                 break;
         }
-        if (playerTarg == null)
+        if (playerTarg3 == null)
         {
             StopAllCoroutines();
             status = "Search";
         }
     }
-    IEnumerator Attack1()
+    IEnumerator Attack4()
     {
-        myNavMeshAgent.SetDestination(playerTarg.transform.position);
-        float distance = Vector3.Distance(transform.position, playerTarg.transform.position);
-        if (distance < 1 && playerTarg != null)
+        myNavMeshAgent.SetDestination(playerTarg3.transform.position);
+        float distance3 = Vector3.Distance(transform.position, playerTarg3.transform.position);
+        if (distance3 < 1 && playerTarg3 != null)
         {
-            Destroy(playerTarg);
+            Destroy(playerTarg3);
             finishPanel.SetActive(true);
             pausePanel.SetActive(false);
             Time.timeScale = 0f;
