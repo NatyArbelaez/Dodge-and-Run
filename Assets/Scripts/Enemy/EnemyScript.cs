@@ -16,7 +16,7 @@ public class EnemyScript : MonoBehaviour
     public GameObject boxRay;
     public GameObject playerTarg;
     public Vector3 destino;
-    string status = "Search";
+    string status;
     NavMeshPath navMeshPath;
     [Header("Objective components")]
     public GameObject patrolTarget;
@@ -24,13 +24,14 @@ public class EnemyScript : MonoBehaviour
     void Start()
     {
         myNavMeshAgent = GetComponent<NavMeshAgent>();
+        status = "Search";
     }
     void FixedUpdate()
     { 
         //Raycast
         t += 0.1f;
         timer += 0.1f;
-        boxRay.transform.Rotate(0.0f, 40 * Mathf.Sin(t * 20), 0.0f, Space.Self);
+        boxRay.transform.Rotate(0.0f, 2f * Mathf.Sin(t), 0.0f, Space.Self);
         RaycastHit hit;
         if (Physics.Raycast(boxRay.transform.position, boxRay.transform.forward, out hit))
         {
@@ -58,11 +59,6 @@ public class EnemyScript : MonoBehaviour
                     StartCoroutine(Attack());
                 }
                 break;
-        }
-        if (playerTarg == null)
-        {
-            StopAllCoroutines();
-            status = "Search";
         }
     }
     IEnumerator Attack()
