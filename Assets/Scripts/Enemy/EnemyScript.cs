@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.SceneManagement;
 
 public class EnemyScript : MonoBehaviour
 {
@@ -17,19 +18,24 @@ public class EnemyScript : MonoBehaviour
     public GameObject playerTarg;
     public Vector3 destino;
     string status = "Search";
-    NavMeshPath navMeshPath;
     [Header("Objective components")]
     public GameObject patrolTarget;
     public Vector3 poscharTarget = new Vector3(0.0f, 0.0f, 0.0f);
+    public GameObject finishPanel;
+    public GameObject pausePanel;
     void Start()
     {
         myNavMeshAgent = GetComponent<NavMeshAgent>();
     }
     void FixedUpdate()
-    { 
+    {
         //Raycast
         t += 0.1f;
         timer += 0.1f;
+        if (t >= 100)
+        {
+            myNavMeshAgent.speed = 4;
+        }
         boxRay.transform.Rotate(0.0f, 40 * Mathf.Sin(t * 20), 0.0f, Space.Self);
         RaycastHit hit;
         if (Physics.Raycast(boxRay.transform.position, boxRay.transform.forward, out hit))
@@ -46,7 +52,6 @@ public class EnemyScript : MonoBehaviour
             Debug.DrawRay(boxRay.transform.position, boxRay.transform.forward * 1000, Color.red);
         }
         //Maquina de estados
-        myNavMeshAgent.speed = 2.5f;
         switch (status)
         {
             case "Search":
@@ -55,7 +60,7 @@ public class EnemyScript : MonoBehaviour
             case "Attack":
                 if (playerTarg != null)
                 {
-                    StartCoroutine(Attack());
+                    StartCoroutine("Attack1");
                 }
                 break;
         }
@@ -65,19 +70,16 @@ public class EnemyScript : MonoBehaviour
             status = "Search";
         }
     }
-    IEnumerator Attack()
+    IEnumerator Attack1()
     {
         myNavMeshAgent.SetDestination(playerTarg.transform.position);
         float distance = Vector3.Distance(transform.position, playerTarg.transform.position);
         if (distance < 1 && playerTarg != null)
         {
             Destroy(playerTarg);
-        }
-        if (distance > 7)
-        {
-            Debug.Log(distance);
-            status = "Search";
-            StopAllCoroutines();
+            finishPanel.SetActive(true);
+            pausePanel.SetActive(false);
+            Time.timeScale = 0f;
         }
         yield return null;
     }
@@ -85,7 +87,7 @@ public class EnemyScript : MonoBehaviour
     {
         if (!confirmDestino) SearchForDest();
         if (confirmDestino) myNavMeshAgent.SetDestination(destino);
-        if (Vector3.Distance(transform.position, destino) < 2 || timer > 30)
+        if (Vector3.Distance(transform.position, destino) < 2 || timer > 10)
         {
             confirmDestino = false;
             timer = 0;

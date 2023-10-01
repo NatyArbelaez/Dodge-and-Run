@@ -31,12 +31,12 @@ public class MovementCharacter : MonoBehaviour
             transform.rotation = Quaternion.Slerp(transform.rotation, rotacionObjetivo, Time.deltaTime * velocidadRotacion);
 
             //estaMoviendo = true;
-            animator.enabled = true;
+            animator.SetBool("Walk", true);
         }
         else
         {
             //estaMoviendo = false;
-            animator.enabled = false;
+            animator.SetBool("Walk", false);
         }
     }
 
